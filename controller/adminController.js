@@ -1,7 +1,6 @@
 const fs = require('fs')
 const path = require('path');
 const csv = require('csv-parser');
-PDFParser = require("pdf2json");
 
 
 exports.addMultiUsers = async(req, res, next) => {
