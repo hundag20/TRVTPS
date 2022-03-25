@@ -1,0 +1,28 @@
+{
+  "name": "trvtps",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hundag20/TRVTPS.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hundag20/TRVTPS/issues"
+  },
+  "homepage": "https://github.com/hundag20/TRVTPS#readme",
+  "dependencies": {
+    "body-parser": "^1.19.2",
+    "csv-parser": "^3.0.0",
+    "express": "^4.17.3",
+    "formidable": "^2.0.1",
+    "multer": "^1.4.4",
+    "pdf2json": "^2.0.0",
+    "yenepaysdk": "^1.2.0"
+  }
+}
