@@ -17,6 +17,7 @@ const payRoutes = require('./routes/payRoute');
 app.use(bodyParser.urlencoded({ extended: false }));
 // app.use(express.static(path.join(__dirname, 'static')));
 
+app.get('/', (req, res) => {res.redirect('www.google.com')});
 app.use(driverRoutes);
 app.use(officerRoutes);
 app.use(adminRoutes);
