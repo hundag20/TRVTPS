@@ -9,7 +9,7 @@ exports.addMultiUsers = async(req, res, next) => {
     const role = req.body.role;
     fs.createReadStream(req.file.path)
   .pipe(csv())
-  .on('data', function (row) {
+  .on('data', async function (row) {
       console.log(row);
     if(role === 'admin'){
     await User.addAdmin(row);
