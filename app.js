@@ -26,7 +26,7 @@ app.use(officerRoutes);
 app.use(adminRoutes);
 app.use(express.static(__dirname));
 
-app.listen(8000);
+app.listen();
 
 // var http = require('http');
 // var server = http.createServer(function(req, res) {
