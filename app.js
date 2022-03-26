@@ -17,7 +17,7 @@ const payRoutes = require('./routes/payRoute');
 app.use(bodyParser.urlencoded({ extended: false }));
 // app.use(express.static(path.join(__dirname, 'static')));
 
-app.get('/h', (req, res) => {
+app.get('/ts', (req, res) => {
     console.log('/ get received');
     res.send('<html>jjj</html>');
 });
