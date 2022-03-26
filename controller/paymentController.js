@@ -9,8 +9,8 @@ exports.CheckoutCart = function(req, res) {
     
     
     var successUrlReturn = "PAYMENT_SUCCESS_RETURN_URL";
-    var ipnUrlReturn = "PAYMENT_COMPLETION_NOTIFICATION_URL",
-    var cancelUrlReturn = "PAYMENT_CANCEL_RETURN_URL",
+    var ipnUrlReturn = "PAYMENT_COMPLETION_NOTIFICATION_URL";
+    var cancelUrlReturn = "PAYMENT_CANCEL_RETURN_URL";
     var failureUrl = "PAYMENT_FAILURE_RETURN_URL";
     var expiresAfter = "NUMBER_OF_MINUTES_BEFORE_THE_ORDER_EXPIRES less than a day";
     // var orderId = "UNIQUE_ID_THAT_IDENTIFIES_THIS_ORDER_ON_YOUR_SYSTEM";
