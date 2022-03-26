@@ -1,3 +1,4 @@
+var http = require('http');
 const path = require('path');
 
 const express = require('express');
@@ -17,7 +18,7 @@ const payRoutes = require('./routes/payRoute');
 app.use(bodyParser.urlencoded({ extended: false }));
 // app.use(express.static(path.join(__dirname, 'static')));
 
-app.get('/ts', (req, res) => {
+app.get('/', (req, res) => {
     console.log('/ get received');
     res.send('<html>jjj</html>');
 });
@@ -27,6 +28,7 @@ app.use(adminRoutes);
 app.use(express.static(__dirname));
 
 app.listen();
+http.createServer(app).listen();
 
 // var http = require('http');
 // var server = http.createServer(function(req, res) {
