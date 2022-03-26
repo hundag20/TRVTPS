@@ -17,7 +17,7 @@ const payRoutes = require('./routes/payRoute');
 app.use(bodyParser.urlencoded({ extended: false }));
 // app.use(express.static(path.join(__dirname, 'static')));
 
-app.get('/', (req, res) => {
+app.get('/h', (req, res) => {
     console.log('/ get received');
     res.send('<html>jjj</html>');
 });
@@ -26,7 +26,7 @@ app.use(officerRoutes);
 app.use(adminRoutes);
 app.use(express.static(__dirname));
 
-app.listen();
+app.listen(8000);
 
 // var http = require('http');
 // var server = http.createServer(function(req, res) {
