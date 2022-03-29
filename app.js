@@ -3,9 +3,14 @@ const path = require('path');
 const pino = require('pino');
 const express = require('express');
 const bodyParser = require('body-parser');
+const fs = require("fs");
+const { Console } = require("console");
+
+const myLogger = new Console({
+    stdout: fs.createWriteStream("normalStdout.txt")
+  });
 
 const app = express();
-const logger = pino({level: 'info'});
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
@@ -21,7 +26,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get('/', (req, res) => {
     console.log('/ get received');
-    logger.info('/ get received');
+    myLogger.log('/ get received');
     res.send('<html>jjj</html>');
 });
 app.use(driverRoutes);
