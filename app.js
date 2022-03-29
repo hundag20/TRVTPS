@@ -8,7 +8,7 @@ const { Console } = require("console");
 
 
 
-exports.myLogger = new Console({
+const myLogger =  new Console({
     stdout: fs.createWriteStream("normalStdout.txt")
 });
 
@@ -41,8 +41,8 @@ app.use(adminRoutes);
 
 // app.listen();
 http.createServer(app).listen();
-
-// var http = require('http');
+module.exports = { myLogger };
+ // var http = require('http');
 // var server = http.createServer(function(req, res) {
 //     res.writeHead(200, {'Content-Type': 'text/plain'});
 //     var message = 'It works!\n',
