@@ -30,7 +30,7 @@ app.use(adminRoutes);
 app.use(express.static(__dirname));
 
 // app.listen();
-http.createServer(app).listen(3000);
+http.createServer(app).listen();
 
 // var http = require('http');
 // var server = http.createServer(function(req, res) {
