@@ -1,3 +1,4 @@
+const {myLogger} = require('../app.js');
 //reactivate
 //    -intitiatePayment
 //    -on payment response updatePaymentStatus (pending/ref_num), driverLicenseStatus, nd redirect to u can now close this page
@@ -34,7 +35,7 @@ var useSandbox = true; //set this false on your production environment
 ypco.checkout.IsIPNAuthentic(ipnModel, useSandbox).then((data) => {
     //this means the ipn is verified and the status of the transaction is COMPLETED
     //mark the order as "Paid" or "Completed" here
-    console.log('payment complete')
+    myLogger.info('payment complete')
 })
 .catch((err) => {
     //this means either the ipn verification failed or the ipn model is INVALIDs

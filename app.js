@@ -8,7 +8,7 @@ const { Console } = require("console");
 
 
 
-const myLogger = new Console({
+exports.myLogger = new Console({
     stdout: fs.createWriteStream("normalStdout.txt")
 });
 
