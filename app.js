@@ -11,6 +11,7 @@ const { Console } = require("console");
 const myLogger =  new Console({
     stdout: fs.createWriteStream("normalStdout.txt")
 });
+module.exports = { myLogger };
 
 myLogger.log(`app started`);
 
@@ -41,7 +42,6 @@ app.use(adminRoutes);
 
 // app.listen();
 http.createServer(app).listen();
-module.exports = myLogger;
  // var http = require('http');
 // var server = http.createServer(function(req, res) {
 //     res.writeHead(200, {'Content-Type': 'text/plain'});
