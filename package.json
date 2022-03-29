@@ -23,6 +23,7 @@
     "formidable": "^2.0.1",
     "multer": "^1.4.4",
     "pdf2json": "^2.0.0",
+    "pino": "^7.9.2",
     "yenepaysdk": "^1.2.0"
   }
 }

@@ -1,10 +1,11 @@
 var http = require('http');
 const path = require('path');
-
+const pino = require('pino');
 const express = require('express');
 const bodyParser = require('body-parser');
 
 const app = express();
+const logger = pino({level: 'info'});
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
@@ -20,6 +21,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get('/', (req, res) => {
     console.log('/ get received');
+    logger.info('/ get received');
     res.send('<html>jjj</html>');
 });
 app.use(driverRoutes);
@@ -28,7 +30,7 @@ app.use(adminRoutes);
 app.use(express.static(__dirname));
 
 // app.listen();
-http.createServer(app).listen();
+http.createServer(app).listen(3000);
 
 // var http = require('http');
 // var server = http.createServer(function(req, res) {
