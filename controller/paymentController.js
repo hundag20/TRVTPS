@@ -45,7 +45,7 @@ ypco.checkout.IsIPNAuthentic(ipnModel, useSandbox).then((data) => {
 });;
 }
 exports.successDestination = async(req, res, next) => {
-    res.send('payment complete u can close this page');
+    res.JSON(req.params)
     }
 //destinations for others too
 
