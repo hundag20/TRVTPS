@@ -36,7 +36,7 @@ app.get('/', (req, res) => {
 app.use(driverRoutes);
 app.use(officerRoutes);
 app.use(adminRoutes);
-app.use(express.static(__dirname));
+//app.use(express.static(__dirname));
 
 // app.listen();
 http.createServer(app).listen();
