@@ -31,6 +31,8 @@ var ypco = require('yenepaysdk');
         };
 exports.IPNDestination = async(req, res, next) => {
 var ipnModel = req.body;
+myLogger.info(ipnModel)
+
 var useSandbox = true; //set this false on your production environment
 ypco.checkout.IsIPNAuthentic(ipnModel, useSandbox).then((data) => {
     //this means the ipn is verified and the status of the transaction is COMPLETED
