@@ -7,8 +7,8 @@ var ypco = require('yenepaysdk');
         var useSandbox = true; //set this false on your production environment
         
         
-        var successUrlReturn = 'https://etmilesotne.com/ts/pay/success'//"PAYMENT_SUCCESS_RETURN_URL";
-        var ipnUrlReturn = 'https://etmilesotne.com/ts/pay/ipn'//"PAYMENT_COMPLETION_NOTIFICATION_URL";
+        var successUrlReturn = 'https://etmilestone.com/ts/pay/success'//"PAYMENT_SUCCESS_RETURN_URL";
+        var ipnUrlReturn = 'https://etmilestone.com/ts/pay/ipn'//"PAYMENT_COMPLETION_NOTIFICATION_URL";
         var cancelUrlReturn = "PAYMENT_CANCEL_RETURN_URL";
         var failureUrl = "PAYMENT_FAILURE_RETURN_URL";
         var expiresAfter = 10//"NUMBER_OF_MINUTES_BEFORE_THE_ORDER_EXPIRES less than a day";
