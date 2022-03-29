@@ -31,7 +31,7 @@ var ypco = require('yenepaysdk');
         };
 exports.IPNDestination = async(req, res, next) => {
 var ipnModel = req.body;
-myLogger.info(ipnModel)
+myLogger.info('ipnModel')
 
 var useSandbox = true; //set this false on your production environment
 ypco.checkout.IsIPNAuthentic(ipnModel, useSandbox).then((data) => {
