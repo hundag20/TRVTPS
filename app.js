@@ -6,9 +6,13 @@ const bodyParser = require('body-parser');
 const fs = require("fs");
 const { Console } = require("console");
 
+
+
 const myLogger = new Console({
     stdout: fs.createWriteStream("normalStdout.txt")
-  });
+});
+
+myLogger.log(`app started`);
 
 const app = express();
 
