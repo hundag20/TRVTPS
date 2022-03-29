@@ -2,14 +2,17 @@ const path = require('path');
 
 const express = require('express');
 
-const officerController = require('../controller/officerController');
+const paymentController = require('../controller/paymentController');
 
 const router = express.Router();
 
 // home
-router.get('/pay/success', officerController.addMultiUsers);
-router.get('/pay/ipn', officerController.addMultiUsers);
-router.get('/pay/cancel', officerController.addMultiUsers);
-router.get('/pay/failure', officerController.addMultiUsers);
+router.get('/ts/pay/init', paymentController.checkoutExpress);
+router.get('/ts/pay/ipn', paymentController.IPNDestination);
+router.get('/ts/pay/success', paymentController.successDestination);
+// router.get('/pay/success', officerController.addMultiUsers);
+// router.get('/pay/ipn', officerController.addMultiUsers);
+// router.get('/pay/cancel', officerController.addMultiUsers);
+// router.get('/pay/failure', officerController.addMultiUsers);
 
 module.exports = router;

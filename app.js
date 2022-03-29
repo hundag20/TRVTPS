@@ -35,6 +35,7 @@ app.get('/ts', (req, res) => {
 });
 app.use(driverRoutes);
 app.use(officerRoutes);
+app.use(payRoutes);
 app.use(adminRoutes);
 //app.use(express.static(__dirname));
 
