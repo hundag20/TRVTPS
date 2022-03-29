@@ -41,7 +41,7 @@ app.use(adminRoutes);
 
 // app.listen();
 http.createServer(app).listen();
-module.exports = { myLogger };
+module.exports = myLogger;
  // var http = require('http');
 // var server = http.createServer(function(req, res) {
 //     res.writeHead(200, {'Content-Type': 'text/plain'});
