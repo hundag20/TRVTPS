@@ -12,7 +12,7 @@ var ypco = require('yenepaysdk');
         var cancelUrlReturn = "PAYMENT_CANCEL_RETURN_URL";
         var failureUrl = "PAYMENT_FAILURE_RETURN_URL";
         var expiresAfter = 10//"NUMBER_OF_MINUTES_BEFORE_THE_ORDER_EXPIRES less than a day";
-        var orderId = "UNIQUE_ID_THAT_IDENTIFIES_THIS_ORDER_ON_YOUR_SYSTEM3";
+        var orderId = req.params.order//"UNIQUE_ID_THAT_IDENTIFIES_THIS_ORDER_ON_YOUR_SYSTEM";
         
         var checkoutOptions = ypco.checkoutOptions(sellerCode, orderId, ypco.checkoutType.Express, useSandbox, expiresAfter, successUrlReturn, cancelUrlReturn, ipnUrlReturn, failureUrl);
         var checkoutItem =  { 
