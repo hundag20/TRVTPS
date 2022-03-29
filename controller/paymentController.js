@@ -1,4 +1,4 @@
-const {myLogger} = require('../app.js');
+const myLogger = require('../app.js');
 //reactivate
 //    -intitiatePayment
 //    -on payment response updatePaymentStatus (pending/ref_num), driverLicenseStatus, nd redirect to u can now close this page
