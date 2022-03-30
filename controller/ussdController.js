@@ -39,3 +39,7 @@ let response = '';
     // DONE!!!
 
 }
+
+exports.ussdHandler2 = (req, res) => {
+    myLogger.info('get ussd');
+}
