@@ -24,8 +24,10 @@ const driverRoutes = require('./routes/driverRoute');
 const officerRoutes = require('./routes/officerRoute');
 const adminRoutes = require('./routes/adminRoute');
 const payRoutes = require('./routes/payRoute');
+const ussdRoutes = require('./routes/ussdRoute');
 //const adminRoutes = require('./routes/admin');
 
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 // app.use(express.static(path.join(__dirname, 'static')));
 
@@ -38,10 +40,11 @@ app.use(driverRoutes);
 app.use(officerRoutes);
 app.use(payRoutes);
 app.use(adminRoutes);
+app.use(ussdRoutes);
 //app.use(express.static(__dirname));
 
 // app.listen();
-http.createServer(app).listen();
+http.createServer(app).listen(3000);
  // var http = require('http');
 // var server = http.createServer(function(req, res) {
 //     res.writeHead(200, {'Content-Type': 'text/plain'});

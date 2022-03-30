@@ -1,19 +1,19 @@
 const db = require('../utils/database')
 
 module.exports = class Admin { 
-  constructor(username, id, descr, sex, status, rating){
-    this.username = username;
-    this.id = id;
-    this.descr = descr;
-    this.sex = sex;
-    this.status = status || 'zz';
-    this.rating = rating || 0;
+  constructor(newAdmin){
+    this.username = newAdmin.username;
+    this.id = newAdmin.id;
+    this.descr = newAdmin.descr;
+    this.sex = newAdmin.sex;
+    this.status = newAdmin.status || 'zz';
+    this.rating = newAdmin.rating || 0;
 
   }
 
   save() {
    try{
-    db.execute('INSERT INTO user (id, username, descr, sex, status, rating) VALUES (?,?,?,?,?,?)', [ this.id, this.username, this.descr, this.sex, this.status, this.rating]);
+    db.execute('INSERT INTO admin (id, username, descr, sex, status, rating) VALUES (?,?,?,?,?,?)', [ this.id, this.username, this.descr, this.sex, this.status, this.rating]);
   }catch(err){
     console.log('err@register: ' + err);
   }

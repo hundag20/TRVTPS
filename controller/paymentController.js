@@ -46,6 +46,7 @@ ypco.checkout.IsIPNAuthentic(ipnModel, useSandbox).then((data) => {
 }
 exports.successDestination = async(req, res, next) => {
     res.json(req.query)
+    //ipnhere
     }
 //destinations for others too
 
