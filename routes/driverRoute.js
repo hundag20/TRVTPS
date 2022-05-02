@@ -8,10 +8,11 @@ const auth = require("../middleware/auth.js");
 const router = express.Router();
 
 // driver endpoints
-router.post("/driver/login", auth.login);
+router.get("/ts/driver/login", auth.login);
+//NOTE post changed to get for testing but bad practice
 
 router.get(
-  "/driver/getRecord",
+  "/ts/driver/getRecord",
   auth.verifyToken,
   //verify role is driver
   (req, res, next) => {
