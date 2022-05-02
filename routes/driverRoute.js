@@ -9,7 +9,7 @@ const router = express.Router();
 
 // driver endpoints
 router.get("/ts/driver/login", auth.login);
-//NOTE post changed to get for testing but bad practice
+//REMINDER: post changed to get for testing but bad practice
 
 router.get(
   "/ts/driver/getRecord",

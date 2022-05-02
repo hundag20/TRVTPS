@@ -32,7 +32,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.get("/ts", (req, res) => {
   console.log("/ get received");
   myLogger.log("/ get received");
-  res.send("<html>jjj</html>");
+  res.send("<html>/ts page served</html>");
 });
 app.use(driverRoutes);
 app.use(officerRoutes);

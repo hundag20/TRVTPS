@@ -10,15 +10,15 @@ const auth = require("../middleware/auth.js");
 const router = express.Router();
 
 //admin endpoints
-router.get("/admin", auth.verifyToken, (req, res, next) => {
+router.get("/ts/admin", auth.verifyToken, (req, res, next) => {
   res.send(`your role is: ${req.userId}`);
 });
-router.post(
-  "/admin/addUsersFile",
+router.get(
+  "/ts/admin/addUsersFile",
   upload.single("file"),
   adminController.addMultiUsers
 );
-router.get("/admin/login", auth.login);
-router.post("/admin/addUser", adminController.addSingleUser);
+router.get("/ts/admin/login", auth.login);
+router.get("/ts/admin/addUser", adminController.addSingleUser);
 
 module.exports = router;

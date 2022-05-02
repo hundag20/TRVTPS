@@ -11,7 +11,7 @@ const router = express.Router();
 
 //login endpoint
 router.get("/ts/officer/login", auth.login);
-//NOTE post changed to get for testing but bad practice
+//REMINDER: post changed to get for testing but bad practice
 
 //get records endpoint
 router.get(

@@ -25,6 +25,7 @@ exports.addMultiUsers = async (req, res, next) => {
 exports.addSingleUser = async (req, res, next) => {
   const newUser = { newUser: req.body };
 
+  //REMINDER: sanitize and validate at model (Fat model)
   const user = new User(newUser);
   user
     .save()

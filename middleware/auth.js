@@ -91,8 +91,10 @@ const isDriver = (req, res, next) => {
 };
 
 const login = async (req, res, next) => {
-  const userName = String(req.headers["username"]);
-  const password = String(req.headers["password"]);
+  const userName = String(req.query.username);
+  const password = String(req.query.password);
+  //REMINDER: [plain] password showing on url
+
   if (!userName || !password) {
     return res.status(400).send({
       status: 400,
@@ -131,6 +133,7 @@ const login = async (req, res, next) => {
       );
 
       //return token and user data
+      //REMINDER: the hashed password is being returned with userData, that's a no no
       res.status(200).send({
         userData: user[0][0],
         accessToken: token,
