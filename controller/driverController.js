@@ -11,4 +11,5 @@ exports.getRecord = (req, res, send) => {
 //getProfileInfo
 
 //TODO
-//getRecord(s) (not from user table but from ticket table)
+//return two past records on login
+//getRecord (return all records) (not from user table but from ticket table)
