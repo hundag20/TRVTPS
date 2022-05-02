@@ -1,26 +1,14 @@
-const fs = require('fs')
-const csv = require('csv-parser')
-const formidable = require('formidable');
+const fs = require("fs");
+const csv = require("csv-parser");
+const formidable = require("formidable");
 
-
-exports.addMultiUsers = () => {
-    const form = new formidable.IncomingForm();
-    form.parse(req, function (err, fields, files) {
-      const oldpath = files.filetoupload.filepath;
-      console.log(oldpath);
-      const newpath = 'C:/Users/Your Name/' + files.filetoupload.originalFilename;
-      fs.rename(oldpath, newpath, function (err) {
-        if (err) throw err;
-        res.write('File uploaded and moved!');
-        res.end();
-      });
-    });
-}
-
+exports.getRecord = (req, res, send) => {
+  //return last ticket or x number of tickets based on req
+  res.send({ message: "you want officer records huh" });
+};
+//DONE
+//login
 //getProfileInfo
-//editProfileInfo
 
-//--not from user table but from ticket table
-//getLastTickeIssued
-//getAllTickets
-//--
+//TODO
+//get Last Ticket or All tickets issued(not from user table but from ticket table)
