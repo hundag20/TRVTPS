@@ -24,6 +24,14 @@ router.get(
   },
   ussdController.ussdHandler
 );
+router.post(
+  "/ts/ussd",
+  (req, res, next) => {
+    myLogger.log(`ussd post `);
+    next();
+  },
+  ussdController.ussdHandler
+);
 // router.get('/pay/success', officerController.addMultiUsers);
 // router.get('/pay/ipn', officerController.addMultiUsers);
 // router.get('/pay/cancel', officerController.addMultiUsers);
