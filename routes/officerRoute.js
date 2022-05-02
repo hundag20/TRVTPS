@@ -10,7 +10,8 @@ const router = express.Router();
 //Officer endpoints
 
 //login endpoint
-router.post("/ts/officer/login", auth.login);
+router.get("/ts/officer/login", auth.login);
+//NOTE post changed to get for testing but bad practice
 
 //get records endpoint
 router.get(
