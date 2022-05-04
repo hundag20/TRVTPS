@@ -54,7 +54,7 @@ module.exports = class User {
 
     try {
       return db.execute(
-        "INSERT INTO user (username, password, status, first_name, middle_name, last_name, phone_num, sex, role, email, level, region, authority, yob, nationality, subcity, woreda) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+        "INSERT INTO user (username, password, status, first_name, middle_name, last_name, phone_num, sex, role, email, level, region, authority, yob, nationality, subcity, woreda) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
         [
           this.username,
           newPwd,
@@ -107,7 +107,7 @@ module.exports = class User {
     }
   }
 
-  static updateOne(id, fieldName, fieldValue) {
+  static updateOne(uname, fieldName, fieldValue) {
     try {
       if (fieldName === "name")
         return db.execute("UPDATE user SET username = ? WHERE id = ? ", [
@@ -120,12 +120,12 @@ module.exports = class User {
           id,
         ]);
       if (fieldName === "status")
-        return db.execute("UPDATE user SET status = ? WHERE id = ? ", [
+        return db.execute("UPDATE user SET status = ? WHERE username = ? ", [
           fieldValue,
-          id,
+          uname,
         ]);
     } catch (err) {
-      console.log("err@updateOne: " + err);
+      console.log("err@Model@updateOne: " + err);
     }
   }
 

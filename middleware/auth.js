@@ -27,69 +27,6 @@ const verifyToken = (req, res, next) => {
   });
 };
 
-//authorize
-const isAdmin = (req, res, next) => {
-  //find user from db
-  User.findByPk(req.userId).then((user) => {
-    //check if z user has among others, an admin role also. if role not found next not called nd err shown
-    user.getRoles().then((roles) => {
-      for (let i = 0; i < roles.length; i++) {
-        if (roles[i].name === "admin") {
-          next();
-          return;
-        }
-      }
-
-      res.status(403).send({
-        message: "Require Admin Role!",
-      });
-      return;
-    });
-  });
-};
-
-//authorize
-const isOfficer = (req, res, next) => {
-  //find user from db
-  User.findByPk(req.userId).then((user) => {
-    //check if z user has among others, an admin role also. if role not found next not called nd err shown
-    user.getRoles().then((roles) => {
-      for (let i = 0; i < roles.length; i++) {
-        if (roles[i].name === "admin") {
-          next();
-          return;
-        }
-      }
-
-      res.status(403).send({
-        message: "Require Admin Role!",
-      });
-      return;
-    });
-  });
-};
-
-//authorize
-const isDriver = (req, res, next) => {
-  //find user from db
-  User.findByPk(req.userId).then((user) => {
-    //check if z user has among others, an admin role also. if role not found next not called nd err shown
-    user.getRoles().then((roles) => {
-      for (let i = 0; i < roles.length; i++) {
-        if (roles[i].name === "admin") {
-          next();
-          return;
-        }
-      }
-
-      res.status(403).send({
-        message: "Require Admin Role!",
-      });
-      return;
-    });
-  });
-};
-
 const login = async (req, res, next) => {
   const userName = String(req.query.username);
   const password = String(req.query.password);
@@ -150,9 +87,6 @@ const login = async (req, res, next) => {
 
 const authJwt = {
   verifyToken: verifyToken,
-  isAdmin: isAdmin,
-  isDriver: isDriver,
-  isOfficer: isOfficer,
   login: login,
   // isModerator: isModerator,
   // isModeratorOrAdmin: isModeratorOrAdmin,
@@ -161,8 +95,8 @@ module.exports = authJwt;
 
 //----notes----
 //NOTE: signup will not issue a token only login does, at signup worry abt bycrypt
-//NOTE: ussd acts as a text service....justify by saying, besides no free txt service, also phone can be hacked to make app read a fake number, ussd prevents that.
+//NOTE: ussd acts as a text service....JUSTIFY: besides no free txt service, also phone can be hacked to make app read a fake number, ussd prevents that.
 //NOTE: login with jst license for ussd..at app they r asked pwd too, to get pwd they need to use ussd. at ussed, after loging in, there is an option for create/update pwd -> enter new pwd -> confirm new pwd -> success.
 
 //TODO
-//isDriver, isOfficer, isAdmin, logout
+//logout
