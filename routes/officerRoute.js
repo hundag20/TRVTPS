@@ -30,7 +30,7 @@ router.get(
   officerController.getRecord
 );
 
-//get records endpoint
+//issue ticket endpoint
 router.get(
   "/ts/officer/issueTicket",
   auth.verifyToken,
@@ -44,6 +44,22 @@ router.get(
     } else next();
   },
   penaltyController.issueTicket
+);
+
+//issue ticket endpoint
+router.get(
+  "/ts/officer/findDriver",
+  auth.verifyToken,
+  //verify role is driver
+  (req, res, next) => {
+    if (req.role != "officer") {
+      res.send({
+        status: 400,
+        error: "you don't have officer authorization",
+      });
+    } else next();
+  },
+  officerController.findDriver
 );
 
 module.exports = router;

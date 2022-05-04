@@ -13,6 +13,8 @@ module.exports = class Ticket {
     this.remark = newTicket.remark;
   }
   async save() {
+    //REMINDER sanitize, validate and parametrize
+
     //verfiy license exists
     //verify driver status is active
     //check that offence_level and offence_code are valid
@@ -36,3 +38,7 @@ module.exports = class Ticket {
     }
   }
 };
+
+//TODO verfiy license exists
+//TODO verify driver status is active
+//TODO check that offence_level and offence_code are valid
