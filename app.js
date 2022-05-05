@@ -40,7 +40,7 @@ app.use(payRoutes);
 app.use(adminRoutes);
 app.use(ussdRoutes);
 //app.use(express.static(__dirname));
-http.createServer(app).listen();
+http.createServer(app).listen(3002);
 
 //------todos------
 //TODO: finish this early and start react asap

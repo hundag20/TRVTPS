@@ -7,7 +7,7 @@ dotenv.config();
 
 //authenticate
 const verifyToken = (req, res, next) => {
-  let token = req.headers["x-access-token"];
+  let token = req.query.x_access_token;
 
   if (!token) {
     return res.status(403).send({
