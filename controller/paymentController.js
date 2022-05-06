@@ -43,6 +43,7 @@ exports.checkoutExpress = function (req, res) {
 
   res.send({
     status: 200,
+    amount: 150,
     url: url,
   });
 };
@@ -72,3 +73,5 @@ exports.successDestination = async (req, res, next) => {
 //on ip update db
 //on success nd other responses redirect to simple pages
 //try online
+
+//TODO: return amount too, not just url.(pay button -> amount, and checkout button)
