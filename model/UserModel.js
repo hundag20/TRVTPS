@@ -46,7 +46,7 @@ module.exports = class User {
     )
       throw "username is invalid!";
     if (this.role === "driver") {
-      this.status === "active";
+      this.status = "active";
     }
     //becrypt enc password before inserting into db, but need to decrypt cuz req holds encrypted pwd.
     // now we set user password to hashed password
