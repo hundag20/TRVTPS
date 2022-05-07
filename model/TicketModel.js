@@ -37,6 +37,15 @@ module.exports = class Ticket {
       return err;
     }
   }
+  static find(license_id) {
+    try {
+      return db.execute("SELECT * FROM fine WHERE issued_to = ? ", [
+        license_id,
+      ]);
+    } catch (err) {
+      console.log("err@findOne: " + err);
+    }
+  }
 };
 
 //TODO verfiy license exists
