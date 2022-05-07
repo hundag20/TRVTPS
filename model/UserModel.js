@@ -45,6 +45,9 @@ module.exports = class User {
       (isNaN(this.username) || this.username.length != 6)
     )
       throw "username is invalid!";
+    if (this.role === "driver") {
+      this.status === "active";
+    }
     //becrypt enc password before inserting into db, but need to decrypt cuz req holds encrypted pwd.
     // now we set user password to hashed password
     const newPwd = await bcrypt.hash(String(this.password), process.env.SALT);
