@@ -5,7 +5,7 @@ const User = require("../model/UserModel");
 const Ticket = require("../model/TicketModel.js");
 
 exports.getRecord = (req, res, send) => {
-  //return last ticket or x number of tickets based on req
+  //return last ticket or x num of tickets based on req
   const license_id = req.uname;
   Ticket.find(license_id)
     .then((tickets) => {
