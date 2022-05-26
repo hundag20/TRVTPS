@@ -37,8 +37,9 @@ exports.ussdHandler = (req, res) => {
     const news = "sample news";
     // This is a terminal request. Note how we start the response with END
     response = `END latest announcement ${news}`;
-  } else {
+  } else if (text) {
     //new pwd enter, check if first 1 is selected 1*smth regex
+    response = `END password reset successfully`;
   }
 
   // Print the response onto the page so that our SDK can read it
