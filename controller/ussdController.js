@@ -1,4 +1,5 @@
 const { myLogger } = require("../app.js");
+var shortUrl = require("node-url-shortener");
 const paymentController = require("../controller/paymentController");
 
 exports.ussdHandler = async (req, res) => {
@@ -17,7 +18,9 @@ exports.ussdHandler = async (req, res) => {
   } else if (text == "1") {
     // Business logic for first level response
     const url = await paymentController.getUrl(req);
-    response = `END use this url to complete payment: ${url}`;
+    shortUrl.short(url, function (err, url) {
+      response = `END use this url to complete payment: ${url}`;
+    });
   } else if (text == "2") {
     // Business logic for first level response
     response = `CON please enter your new password`;
