@@ -4,7 +4,7 @@ myLogger.info("hi");
 //    -intitiatePayment
 //    -on payment response updatePaymentStatus (pending/ref_num), driverLicenseStatus, nd redirect to u can now close this page
 var ypco = require("yenepaysdk");
-exports.checkoutExpress = function (req, res) {
+exports.getUrl = function (req) {
   var sellerCode = "SB1447"; //"YOUR_USER_CODE_IN_YENEPAY";
   var useSandbox = true; //set this false on your production environment
 
@@ -40,6 +40,11 @@ exports.checkoutExpress = function (req, res) {
     checkoutOptions,
     checkoutItem
   );
+
+  return url;
+};
+exports.checkoutExpress = async function (req, res) {
+  const url = await getUrl(req);
 
   res.send({
     status: 200,

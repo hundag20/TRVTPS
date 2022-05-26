@@ -1,4 +1,5 @@
 const { myLogger } = require("../app.js");
+const paymentController = require("../controller/paymentController");
 
 exports.ussdHandler = (req, res) => {
   const { sessionId, serviceCode, phoneNumber, text } = req.body;
@@ -15,9 +16,8 @@ exports.ussdHandler = (req, res) => {
         3. get information`;
   } else if (text == "1") {
     // Business logic for first level response
-    response = `CON Choose account information you want to view
-        1. Penatly information
-        2. Traffic Management Agency news`;
+    const url = await paymentController.getUrl(req);
+    response = `use this url to complete payment: ${url}`;
   } else if (text == "2") {
     // Business logic for first level response
     response = `CON please enter your new password`;
