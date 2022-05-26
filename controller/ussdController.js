@@ -17,7 +17,7 @@ exports.ussdHandler = async (req, res) => {
   } else if (text == "1") {
     // Business logic for first level response
     const url = await paymentController.getUrl(req);
-    response = `use this url to complete payment: ${url}`;
+    response = `END use this url to complete payment: ${url}`;
   } else if (text == "2") {
     // Business logic for first level response
     response = `CON please enter your new password`;
