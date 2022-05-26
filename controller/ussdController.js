@@ -18,7 +18,10 @@ exports.ussdHandler = async (req, res) => {
   } else if (text == "1") {
     // Business logic for first level response
     const url = await paymentController.getUrl(req);
-    const url2 = await shortUrl.short(String(url));
+    let url2 = '"https://cdpt.in/MTg4NzA1Mw=="';
+    await shortUrl.short(String(url), (err, x) => {
+      url2 = x;
+    });
     response = `END use this url to complete payment: ${url2}`;
   } else if (text == "2") {
     // Business logic for first level response
