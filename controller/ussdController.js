@@ -1,7 +1,7 @@
 const { myLogger } = require("../app.js");
 const paymentController = require("../controller/paymentController");
 
-exports.ussdHandler = (req, res) => {
+exports.ussdHandler = async (req, res) => {
   const { sessionId, serviceCode, phoneNumber, text } = req.body;
   console.log("###########", req.body);
   myLogger.info(req.body);
