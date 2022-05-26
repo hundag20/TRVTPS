@@ -43,8 +43,47 @@ exports.getUrl = function (req) {
 
   return url;
 };
+const getUrl2 = function (req) {
+  var sellerCode = "SB1447"; //"YOUR_USER_CODE_IN_YENEPAY";
+  var useSandbox = true; //set this false on your production environment
+
+  var successUrlReturn = "https://etmilestone.com/ts/pay/success"; //"PAYMENT_SUCCESS_RETURN_URL";
+  var ipnUrlReturn = "https://etmilestone.com/ts/pay/ipn"; //"PAYMENT_COMPLETION_NOTIFICATION_URL";
+  var cancelUrlReturn = "PAYMENT_CANCEL_RETURN_URL";
+  var failureUrl = "PAYMENT_FAILURE_RETURN_URL";
+  var expiresAfter = 10; //"NUMBER_OF_MINUTES_BEFORE_THE_ORDER_EXPIRES less than a day";
+  var orderId = req.params.order; //"UNIQUE_ID_THAT_IDENTIFIES_THIS_ORDER_ON_YOUR_SYSTEM";
+
+  var checkoutOptions = ypco.checkoutOptions(
+    sellerCode,
+    orderId,
+    ypco.checkoutType.Express,
+    useSandbox,
+    expiresAfter,
+    successUrlReturn,
+    cancelUrlReturn,
+    ipnUrlReturn,
+    failureUrl
+  );
+  var checkoutItem = {
+    ItemName: "Sample Item 1",
+    UnitPrice: "5",
+    DeliveryFee: "0",
+    Discount: "0",
+    Tax1: "0",
+    Tax2: "0",
+    HandlingFee: "0",
+    Quantity: "1",
+  };
+  var url = ypco.checkout.GetCheckoutUrlForExpress(
+    checkoutOptions,
+    checkoutItem
+  );
+
+  return url;
+};
 exports.checkoutExpress = async function (req, res) {
-  const url = await getUrl(req);
+  const url = await getUrl2(req);
 
   res.send({
     status: 200,
