@@ -1,4 +1,6 @@
 const { myLogger } = require("../app.js");
+var shortUrl = require("node-url-shortener");
+
 myLogger.info("hi");
 //reactivate
 //    -intitiatePayment
@@ -85,10 +87,12 @@ const getUrl2 = function (req) {
 exports.checkoutExpress = async function (req, res) {
   const url = await getUrl2(req);
 
-  res.send({
-    status: 200,
-    amount: 150,
-    url: url,
+  shortUrl.short(String(url), function (err, url2) {
+    res.send({
+      status: 200,
+      amount: 150,
+      url: url2,
+    });
   });
 };
 exports.IPNDestination = async (req, res, next) => {
