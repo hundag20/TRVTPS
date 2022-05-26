@@ -19,6 +19,19 @@ router.get(
   adminController.addMultiUsers
 );
 router.get("/ts/admin/login", auth.login);
-router.get("/ts/admin/addUser", adminController.addSingleUser);
+router.get(
+  "/ts/admin/addUser",
+  auth.verifyToken,
+  //verify role is admin
+  (req, res, next) => {
+    if (req.role != "admin") {
+      res.send({
+        status: 400,
+        error: "you don't have admin authorization",
+      });
+    } else next();
+  },
+  adminController.addSingleUser
+);
 
 module.exports = router;

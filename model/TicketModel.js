@@ -1,4 +1,5 @@
 const db = require("../utils/database");
+const User = require("../model/UserModel.js");
 
 module.exports = class Ticket {
   constructor({ newTicket }) {
@@ -15,9 +16,16 @@ module.exports = class Ticket {
   async save() {
     //REMINDER sanitize, validate and parametrize
 
-    //verfiy license exists
     //verify driver status is active
     //check that offence_level and offence_code are valid
+    //verfiy license exists
+    const user = await User.findOne(this.issued_to);
+    if (!user || user[0].length === 0 || !user[0][0]) {
+      throw "Driver with that license id doesn't exist";
+    }
+    if (user[0][0].status != "active") {
+      throw "driver has a pending ticket";
+    }
     try {
       return db.execute(
         "INSERT INTO fine (issued_to, issued_by, location, date, time, offence_level, offence_code, plate_num, remark) VALUES (?,?,?,?,?,?,?,?,?)",
@@ -44,6 +52,7 @@ module.exports = class Ticket {
       ]);
     } catch (err) {
       console.log("err@findOne: " + err);
+      return err;
     }
   }
 };

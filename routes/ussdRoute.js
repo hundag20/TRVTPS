@@ -38,9 +38,3 @@ router.post(
 // router.get('/pay/failure', officerController.addMultiUsers);
 
 module.exports = router;
-
-//TODO
-//make ussd a separate app
-//then post it to etmilestone.com.(still started on localhost(can't use nginx on cpanel's terminal cuz they don have it installed...[justification: ideally..u'd buy a premimum package and u get ur own terminal where u can install stuff on])..but atleast updated code and db)
-//just put the ussdView in httpdocs..will take the post request and return the menus, then relay(redirect) the handling of the different options to the main trvtps subdomain.
-//wat if i just put our url on thier callback url page

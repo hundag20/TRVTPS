@@ -43,10 +43,14 @@ app.use(ussdRoutes);
 http.createServer(app).listen();
 
 //------todos------
-//TODO: finish this early and start react asap
+//DONE: disable double ticketing
+//TODO: calculate penalty for real
+//TODO: generate url for completing payment (not new jst the redirect url-- but maybe a short string instead of full url-- maybe there is a library for this)
+//TODO: on success show real page and message
+//TODO: reset pwd feature on USSD
+//TODO: catch all unhandled routes nd errs at app.js
 
 //TODO: SECURITY features checklist: SQLinjection, ..
-//TODO: DB feilds have shrunk..remedy by inroducing the firebase
 //TODO: at admin there should be a feature for disabling an account easily..cuz if a phone is stolen all access is open.
 
 //-----notes-----

@@ -28,8 +28,6 @@ exports.issueTicket = async (req, res, send) => {
   ticket
     .save()
     .then((savedTicket) => {
-      console.log(savedTicket);
-
       const uname = ticketParam.license_id;
       const field = "status";
       const value = savedTicket[0].insertId;
@@ -49,6 +47,18 @@ exports.issueTicket = async (req, res, send) => {
         });
     })
     .catch((err) => {
+      if (err === "driver has a pending ticket") {
+        return res.status(400).send({
+          status: "400",
+          message: "driver has a pending ticket!",
+        });
+      }
+      if (err === "Driver with that license id doesn't exist") {
+        return res.status(400).send({
+          status: "400",
+          message: "Driver with that license id doesn't exist!",
+        });
+      }
       console.log(err);
       return res.status(500).send({
         message: "an ERROR occured when saving ticket",

@@ -25,7 +25,6 @@ exports.findDriver = (req, res, send) => {
           message: "driver not found",
         });
       }
-      console.log(driver[1]);
       return res.status(200).send({
         message: "driver found",
         driverInfo: driver[0][0],
