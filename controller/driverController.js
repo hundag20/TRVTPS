@@ -3,24 +3,41 @@ const csv = require("csv-parser");
 const formidable = require("formidable");
 const User = require("../model/UserModel");
 const Ticket = require("../model/TicketModel.js");
+const { myLogger } = require("../app");
 
 exports.getRecord = (req, res, send) => {
-  //return last ticket or x num of tickets based on req
-  const license_id = req.uname;
-  Ticket.find(license_id)
-    .then((tickets) => {
-      return res.status(200).send({
-        status: 200,
-        records: tickets[0].reverse(),
+  try {
+    //return last ticket or x num of tickets based on req
+    const license_id = req.uname;
+    Ticket.find(license_id)
+      .then((tickets) => {
+        if (tickets && tickets[0] && tickets[0][0]) {
+          return res.status(200).send({
+            status: 200,
+            records: tickets[0].reverse(),
+          });
+        } else {
+          return res.status(400).send({
+            status: 400,
+            message: "driver not found",
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        return res.status(500).send({
+          status: 500,
+          message: "something went wrong",
+        });
       });
-    })
-    .catch((err) => {
-      console.log(err);
-      return res.status(500).send({
-        status: 500,
-        message: "something went wrong",
-      });
+  } catch (e) {
+    console.log(e);
+    myLogger.log(e);
+    return res.status(500).send({
+      status: 500,
+      message: "internal error",
     });
+  }
 };
 //DONE
 //login

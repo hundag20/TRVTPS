@@ -46,13 +46,15 @@ module.exports = class Ticket {
     }
   }
   static find(license_id) {
+    if (!license_id) throw "passing undefined license id";
     try {
-      return db.execute("SELECT * FROM fine WHERE issued_to = ? ", [
+      const result = db.execute("SELECT * FROM fine WHERE issued_to = ? ", [
         license_id,
       ]);
+      return result;
     } catch (err) {
       console.log("err@findOne: " + err);
-      return err;
+      throw err;
     }
   }
 };
