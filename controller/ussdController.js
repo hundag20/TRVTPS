@@ -75,6 +75,29 @@ exports.ussdHandler = async (req, res) => {
       myLogger.log("ERROR: ", err);
       response = `END unexpected error: ${err}`;
     }
+  } else if (/^(1\*.*\*3).+/.test(text)) {
+    // Business logic for first level response
+    try {
+      //verify session id
+      const valid = await verifySession(sessionId);
+      if (valid === "invalid session") {
+        response = "END invalid session";
+      } else {
+        const pwd = text.split("*3*")[1];
+        //update db
+        const ussd = await Ussd.find(sessionId);
+        if (ussd[0].length != 0 && ussd[0][0]) {
+          await User.updateOne(ussd[0][0].license_id, "password", pwd);
+          response = `END password updated successfully`;
+        } else {
+          throw "driver with that session id no longer exists";
+        }
+      }
+    } catch (e) {
+      console.log(e);
+      myLogger.log(e);
+      response = `END ${e}`;
+    }
   } else if (/1\*.*\*2/.test(text)) {
     // Business logic for second level response
     try {
@@ -108,29 +131,6 @@ exports.ussdHandler = async (req, res) => {
       console.log(e);
       myLogger.log(e);
       response = `END e`;
-    }
-  } else if (/^(1\*.*\*3).+/.test(text)) {
-    // Business logic for first level response
-    try {
-      //verify session id
-      const valid = await verifySession(sessionId);
-      if (valid === "invalid session") {
-        response = "END invalid session";
-      } else {
-        const pwd = text.split("*3*")[1];
-        //update db
-        const ussd = await Ussd.find(sessionId);
-        if (ussd[0].length != 0 && ussd[0][0]) {
-          await User.updateOne(ussd[0][0].license_id, "password", pwd);
-          response = `END password updated successfully`;
-        } else {
-          throw "driver with that session id no longer exists";
-        }
-      }
-    } catch (e) {
-      console.log(e);
-      myLogger.log(e);
-      response = `END ${e}`;
     }
   } else if (/1\*.*\*4/.test(text)) {
     try {
@@ -184,9 +184,4 @@ exports.ussdHandler2 = (req, res) => {
 //news (put the option and decide at admin if we're doing it or not)
 
 //NOTE: ussd auth: enter license, if license and phone num match cont.
-//DONE: how is throwed err not handled
-//DONE: why err throwed at that sequence
-//DONE: make option 3 regex work
-//DONE: invalid pwd handle at admin too
-//DONE: setup option 4
-//DONE: else [if] for all unkown regexes- so net problem nvr appears
+//TODO DO complete testing ussd, the regex appeard very buggy

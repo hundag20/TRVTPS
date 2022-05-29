@@ -1,7 +1,6 @@
 const { myLogger } = require("../app.js");
 var shortUrl = require("node-url-shortener");
 
-myLogger.info("hi");
 //reactivate
 //    -intitiatePayment
 //    -on payment response updatePaymentStatus (pending/ref_num), driverLicenseStatus, nd redirect to u can now close this page
@@ -123,3 +122,4 @@ exports.successDestination = async (req, res, next) => {
 //4. admin web
 //5. eyosi's map
 //6. testing and documentation
+//REMINDER: if enough time left change ussd to amharic..maybe tell elsh
