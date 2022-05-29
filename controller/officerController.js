@@ -3,11 +3,6 @@ const csv = require("csv-parser");
 const formidable = require("formidable");
 const User = require("../model/UserModel.js");
 
-exports.getRecord = (req, res, send) => {
-  //return last ticket or x number of tickets based on req
-  res.send({ message: "you want officer records huh" });
-};
-
 exports.findDriver = (req, res, send) => {
   let license_id = "";
   if (req.query.license_id) license_id = req.query.license_id;
