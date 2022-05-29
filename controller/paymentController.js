@@ -115,11 +115,11 @@ exports.successDestination = async (req, res, next) => {
   res.json(req.query);
   //ipnhere
 };
-//destinations for others too
 
-//enter payOptions
-//on ip update db
-//on success nd other responses redirect to simple pages
-//try online
-
-//TODO: return amount too, not just url.(pay button -> amount, and checkout button)
+//TODO
+//1. initPay func..returns url and amount
+//2. eyosi request
+//3. enter policies to db
+//4. admin web
+//5. eyosi's map
+//6. testing and documentation

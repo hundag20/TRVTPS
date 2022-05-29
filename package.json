@@ -18,6 +18,7 @@
   "homepage": "https://github.com/hundag20/TRVTPS#readme",
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "bitly": "^7.1.2",
     "body-parser": "^1.19.2",
     "csv-parser": "^3.0.0",
     "deep-extend": "^0.6.0",

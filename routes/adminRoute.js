@@ -33,5 +33,18 @@ router.get(
   },
   adminController.addSingleUser
 );
-
+router.get(
+  "/ts/admin/addNews",
+  auth.verifyToken,
+  //verify role is admin
+  (req, res, next) => {
+    if (req.role != "admin") {
+      res.send({
+        status: 400,
+        error: "you don't have admin authorization",
+      });
+    } else next();
+  },
+  adminController.addNews
+);
 module.exports = router;

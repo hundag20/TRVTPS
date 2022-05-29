@@ -1,6 +1,7 @@
 const db = require("../utils/database");
 const bcrypt = require("bcrypt");
 const dotenv = require("dotenv");
+const res = require("express/lib/response");
 
 dotenv.config();
 
@@ -26,11 +27,13 @@ module.exports = class User {
   }
 
   async save() {
-    console.log(this);
-    // try {
     //back-end validation for sign-up
     if (!this.sex || !this.role) {
-      throw new Error("required fields are missing");
+      throw "required fields are missing";
+    }
+    if (this.password.includes("*") || this.password.length < 8) {
+      //* is problematic when changinf pwd with ussd
+      throw "invalid password";
     }
     if (this.role === "admin" && !isNaN(this.username.charAt(0))) {
       throw "username can not begin with a number!";
@@ -53,10 +56,8 @@ module.exports = class User {
     const newPwd = await bcrypt.hash(String(this.password), process.env.SALT);
     // console.log('entered pwd: ', String(this.password))
     // console.log('SALT: ', process.env.SALT)
-    console.log("hash: ", newPwd);
-
     try {
-      return db.execute(
+      const result = db.execute(
         "INSERT INTO user (username, password, status, first_name, middle_name, last_name, phone_num, sex, role, email, level, region, authority, yob, nationality, subcity, woreda) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
         [
           this.username,
@@ -78,8 +79,9 @@ module.exports = class User {
           this.woreda,
         ]
       );
+      return result;
     } catch (err) {
-      return err;
+      throw err;
     }
     // } catch (err) {
     //   console.log("err@sign-up: " + err);
@@ -87,10 +89,15 @@ module.exports = class User {
   }
 
   static findOne(username) {
+    if (!username) throw "passing undefined value for searching user";
     try {
-      return db.execute("SELECT * FROM user WHERE username = ? ", [username]);
+      const result = db.execute("SELECT * FROM user WHERE username = ? ", [
+        username,
+      ]);
+      return result;
     } catch (err) {
-      console.log("err@findOne: " + err);
+      console.log("err@findOne: ", err);
+      throw err;
     }
   }
 
@@ -110,7 +117,9 @@ module.exports = class User {
     }
   }
 
-  static updateOne(uname, fieldName, fieldValue) {
+  static async updateOne(uname, fieldName, fieldValue) {
+    if (!uname || !fieldName || !fieldValue)
+      throw "incomplete information given";
     try {
       if (fieldName === "name")
         return db.execute("UPDATE user SET username = ? WHERE id = ? ", [
@@ -127,8 +136,23 @@ module.exports = class User {
           fieldValue,
           uname,
         ]);
+      if (fieldName === "password") {
+        //validate pwd appropirateness
+        if (fieldValue.includes("*") || fieldValue.length < 8) {
+          //* is problematic when changinf pwd with ussd
+          throw "invalid password";
+        }
+        //hash and salt
+        const newPwd = await bcrypt.hash(String(fieldValue), process.env.SALT);
+        const result = db.execute(
+          "UPDATE user SET password = ? WHERE username = ? ",
+          [newPwd, uname]
+        );
+        return result;
+      }
     } catch (err) {
       console.log("err@Model@updateOne: " + err);
+      throw err;
     }
   }
 
@@ -145,3 +169,5 @@ module.exports = class User {
 // parametrize before queries
 // backend validate pwd strength
 // ---doc--- MAKE SURE OFFICER BADGE ID IS 5 DIGITS NUMBER
+
+//NOTE (bug with mysql err handling) "TypeError: Bind parameters must not contain undefined. To pass SQL NULL specify JS null" type errors (caused by null values) are uncatchable by any try/catch blocks so make sure undefined never passes to that statement
