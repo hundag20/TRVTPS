@@ -184,4 +184,3 @@ exports.ussdHandler2 = (req, res) => {
 //news (put the option and decide at admin if we're doing it or not)
 
 //NOTE: ussd auth: enter license, if license and phone num match cont.
-//TODO DO complete testing ussd, the regex appeard very buggy
