@@ -144,8 +144,30 @@ exports.IPNDestination = async (req, res, next) => {
     });
 };
 exports.successDestination = async (req, res, next) => {
-  res.json(req.query);
-  //redirect url..serve web page here
+  try {
+    //redirect url..serve web page here
+    const ticket_id = req.query.MerchantOrderId;
+    await penaltyController.endPenalty(ticket_id);
+    res.json(req.query);
+  } catch (e) {
+    console.log(e);
+    myLogger.log(e);
+    return res.status(500).send({
+      status: 500,
+      message: "internal error",
+    });
+  }
+};
+exports.failDestination = async (req, res, next) => {
+  return res.status(400).send({
+    message: "payment failed",
+    faliure: req.body,
+  });
+};
+exports.cancelDestination = async (req, res, next) => {
+  return res.status(200).send({
+    message: "payment canceled",
+  });
 };
 
 //TODO
@@ -154,7 +176,7 @@ exports.successDestination = async (req, res, next) => {
 //2.DONE: eyosi request *
 //3. DONE: enter policies to db *
 
-//1. initPay func..returns url and amount *
+//1. initPay func..returns url and amount
 //8. update ussd to accomodate amount + url
 
 //4. admin web

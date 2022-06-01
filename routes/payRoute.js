@@ -25,6 +25,8 @@ router.get(
 router.post("/ts/pay/ipn", paymentController.IPNDestination);
 router.get("/ts/pay/ipn", paymentController.IPNDestination);
 router.get("/ts/pay/success", paymentController.successDestination);
+router.get("/ts/pay/cancel", paymentController.cancelDestination);
+router.get("/ts/pay/fail", paymentController.failDestination);
 // router.get('/pay/success', officerController.addMultiUsers);
 // router.get('/pay/ipn', officerController.addMultiUsers);
 // router.get('/pay/cancel', officerController.addMultiUsers);

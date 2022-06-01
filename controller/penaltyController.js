@@ -1,5 +1,6 @@
 const User = require("../model/UserModel.js");
 const Ticket = require("../model/TicketModel.js");
+const Payment = require("../model/PaymentModel.js");
 const Policy_1 = require("../model/Policy_1Model.js");
 const Policy_2 = require("../model/Policy_2Model.js");
 const Policy_3 = require("../model/Policy_3Model.js");
@@ -47,7 +48,7 @@ const suspend = async (license_id, offence_level) => {
   return false;
 };
 
-exports.issueTicket = async (req, res, send) => {
+issueTicket = async (req, res, send) => {
   try {
     const ticketParam = {
       license_id: req.query.license_id,
@@ -179,7 +180,7 @@ const calcAmount = async (info) => {
   };
   return obj;
 };
-exports.getPenalty = async (license_id) => {
+getPenalty = async (license_id) => {
   //based on ticket nd past record info: try{
   //1. throw "no pending ticket", "account suspended"
   //2. calculate and return amount(points nd count updated @payment_success_confirmation via calling update function written @penaltyController)
@@ -224,31 +225,42 @@ exports.getPenalty = async (license_id) => {
     throw err;
   }
 };
-exports.endPenalty = async (ticket_id) => {
+endPenalty = async (ticket_id) => {
   //update user added points, first_time, status
   //create payment record
   //update ticket payment_order_num
-  try {
-    const ticket = await Ticket.findOne(ticket_id);
-    if (!ticket || !ticket[0] || ticket[0].length === 0 || !ticket[0][0])
-      throw "ticket not found";
-    const user = await User.findOne(ticket[0][0].issued_to);
-    if (!user || !user[0] || user[0].length === 0 || !user[0][0])
-      throw "user not found";
 
-    const penalty = await getPenalty(ticket[0][0].issued_to);
-    const new_points = user[0][0].points + penalty.points;
+  const ticket = await Ticket.findById(ticket_id);
+  if (!ticket || !ticket[0] || ticket[0].length === 0 || !ticket[0][0])
+    throw "ticket not found";
+  const user = await User.findOne(ticket[0][0].issued_to);
+  if (!user || !user[0] || user[0].length === 0 || !user[0][0])
+    throw "user not found";
 
-    await User.updateOne(ticket[0][0].issued_to, "status", "active");
-    await User.updateOne(ticket[0][0].issued_to, "first_time", "false");
-    await User.updateOne(ticket[0][0].issued_to, "points", new_points);
+  const penalty = await getPenalty(ticket[0][0].issued_to);
+  const new_points = user[0][0].points + penalty.points;
 
-    //forgot create pay record and update ticket
-    return;
-  } catch (err) {
-    console.log(err);
-    myLogger(err);
-  }
+  await User.updateOne(ticket[0][0].issued_to, "status", "active");
+  await User.updateOne(ticket[0][0].issued_to, "first_time", "false");
+  await User.updateOne(ticket[0][0].issued_to, "points", new_points);
+
+  const newPayment = {
+    newPayment: {
+      amount: penalty.amount,
+      ticket_id: ticket_id,
+    },
+  };
+  const payment = new Payment(newPayment);
+  await payment.save();
+
+  //forgot create pay record and update ticket
+  return;
+};
+
+module.exports = {
+  getPenalty: getPenalty,
+  issueTicket: issueTicket,
+  endPenalty: endPenalty,
 };
 //TODO
 //issueTicket
@@ -262,7 +274,7 @@ exports.endPenalty = async (ticket_id) => {
 // DONE: calcAmount and return*
 // DONE: suspend on ticketing*
 
-// 3. update driver, ticket, and payment info on payment success*
+// 3. update driver, ticket, and payment info on payment success* //test with localhost..for console.logging
 // 5. redirect to real page on payment success*
 
 // 7. Admin UI*
