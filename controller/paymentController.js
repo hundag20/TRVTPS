@@ -139,6 +139,7 @@ exports.IPNDestination = async (req, res, next) => {
     })
     .catch((err) => {
       myLogger.log(err);
+      console.error(err);
       //this means either the ipn verification failed or the ipn model is INVALIDs
     });
 };
