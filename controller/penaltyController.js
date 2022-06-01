@@ -242,6 +242,8 @@ exports.endPenalty = async (ticket_id) => {
     await User.updateOne(ticket[0][0].issued_to, "status", "active");
     await User.updateOne(ticket[0][0].issued_to, "first_time", "false");
     await User.updateOne(ticket[0][0].issued_to, "points", new_points);
+
+    //forgot create pay record and update ticket
     return;
   } catch (err) {
     console.log(err);

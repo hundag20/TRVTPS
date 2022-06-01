@@ -135,10 +135,10 @@ exports.IPNDestination = async (req, res, next) => {
     .then((data) => {
       //this means the ipn is verified and the status of the transaction is COMPLETED
       //mark the order as "Paid" or "Completed" here
-      myLogger.info(data);
+      myLogger.log(data);
     })
     .catch((err) => {
-      myLogger.info(err);
+      myLogger.log(err);
       //this means either the ipn verification failed or the ipn model is INVALIDs
     });
 };
