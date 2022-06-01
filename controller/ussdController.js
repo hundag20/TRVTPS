@@ -1,6 +1,5 @@
 const { myLogger } = require("../app.js");
 const BitlyClient = require("bitly").BitlyClient;
-const bitly = new BitlyClient("585cfc815e12c56668f4429343c19e8b1d1cf30c");
 const paymentController = require("../controller/paymentController");
 const Announcement = require("../model/AnnouncementModel.js");
 const User = require("../model/UserModel.js");
@@ -108,6 +107,9 @@ exports.ussdHandler = async (req, res) => {
       } else {
         //get link and amount instead of jst url
         const url = await paymentController.getUrl(req);
+        const bitly = new BitlyClient(
+          "585cfc815e12c56668f4429343c19e8b1d1cf30c"
+        );
         const resp = await bitly.shorten(url);
         //REMINDER: (done, but enough?)bitly error not handled, try+catch it.
         response = `END use this url to complete payment: ${resp.link}`;

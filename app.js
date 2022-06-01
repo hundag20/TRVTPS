@@ -55,3 +55,5 @@ http.createServer(app).listen();
 
 //-----notes-----
 //NOTE: physical icense id and our digital id are meant to coexist, eg. traffic looks at phyical if for expiration date then proceeds to deactivate the digital license.
+
+//REMINDER: - ignore nd remove .env file from repo - modify models so that password is not returned with userData

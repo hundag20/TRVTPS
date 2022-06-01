@@ -6,8 +6,9 @@ module.exports = class Ticket {
     this.issued_to = newTicket.license_id;
     this.issued_by = newTicket.officer_id;
     this.location = newTicket.location;
-    this.date = newTicket.date;
-    this.time = newTicket.time;
+    //this.date = newTicket.date;
+    //this.time = newTicket.time;
+    this.date_time = Date.now();
     this.offence_level = newTicket.offence_level;
     this.offence_code = newTicket.offence_code;
     this.plate_num = newTicket.plate_num;
@@ -23,18 +24,19 @@ module.exports = class Ticket {
     if (!user || user[0].length === 0 || !user[0][0]) {
       throw "Driver with that license id doesn't exist";
     }
-    if (user[0][0].status != "active") {
+    if (user[0][0].status === "suspended") {
+      throw "driver license is suspended";
+    } else if (user[0][0].status != "active") {
       throw "driver has a pending ticket";
     }
     try {
       return db.execute(
-        "INSERT INTO fine (issued_to, issued_by, location, date, time, offence_level, offence_code, plate_num, remark) VALUES (?,?,?,?,?,?,?,?,?)",
+        "INSERT INTO fine (issued_to, issued_by, location, date_time, offence_level, offence_code, plate_num, remark) VALUES (?,?,?,?,?,?,?,?)",
         [
           this.issued_to,
           this.issued_by,
           this.location,
-          this.date,
-          this.time,
+          this.date_time,
           this.offence_level,
           this.offence_code,
           this.plate_num,
@@ -51,6 +53,16 @@ module.exports = class Ticket {
       const result = db.execute("SELECT * FROM fine WHERE issued_to = ? ", [
         license_id,
       ]);
+      return result;
+    } catch (err) {
+      console.log("err@findOne: " + err);
+      throw err;
+    }
+  }
+  static findById(id) {
+    if (!id) throw "no ticket id provided";
+    try {
+      const result = db.execute("SELECT * FROM fine WHERE id = ? ", [id]);
       return result;
     } catch (err) {
       console.log("err@findOne: " + err);

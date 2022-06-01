@@ -118,7 +118,7 @@ module.exports = class User {
   }
 
   static async updateOne(uname, fieldName, fieldValue) {
-    if (!uname || !fieldName || !fieldValue)
+    if (!uname || !fieldName || (fieldValue != 0 && !fieldValue))
       throw "incomplete information given";
     try {
       if (fieldName === "name")
@@ -133,6 +133,21 @@ module.exports = class User {
         ]);
       if (fieldName === "status")
         return db.execute("UPDATE user SET status = ? WHERE username = ? ", [
+          fieldValue,
+          uname,
+        ]);
+      if (fieldName === "first_time")
+        return db.execute(
+          "UPDATE user SET first_time = ? WHERE username = ? ",
+          [fieldValue, uname]
+        );
+      if (fieldName === "suspended_for")
+        return db.execute(
+          "UPDATE user SET suspended_for = ? WHERE username = ? ",
+          [fieldValue, uname]
+        );
+      if (fieldName === "points")
+        return db.execute("UPDATE user SET points = ? WHERE username = ? ", [
           fieldValue,
           uname,
         ]);

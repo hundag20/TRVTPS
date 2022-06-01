@@ -28,8 +28,8 @@ const verifyToken = (req, res, next) => {
 };
 
 const login = async (req, res, next) => {
-  const userName = String(req.query.username);
-  const password = String(req.query.password);
+  const userName = req.query.username;
+  const password = req.query.password;
   //REMINDER: [plain] password showing on url
 
   if (!userName || !password) {
@@ -40,49 +40,48 @@ const login = async (req, res, next) => {
   }
   //admin can't start with number and 'O'
   //find out about officer badge number or assifn arbitrary alphapet (O) infront of all officer unames...all driver unames  nums only.
-  User.findOne(userName)
-    .then(async (user) => {
-      //if uname not found
-      if (!user || user[0].length === 0) {
-        return res.status(400).send({
-          status: 400,
-          error: "User Not found.",
-        });
-      }
-
-      const pwdEntered = await bcrypt.hash(String(password), process.env.SALT);
-      var passwordIsValid = pwdEntered === user[0][0].password;
-      //if wrong password
-      if (!passwordIsValid) {
-        return res.status(400).send({
-          status: 400,
-          error: "Invalid Password!",
-        });
-      }
-
-      //create new token
-      var token = jwt.sign(
-        { uname: user[0][0].username, role: user[0][0].role },
-        process.env.SECRET,
-        {
-          expiresIn: 86400, //token will expire in 24 hours
-        }
-      );
-
-      //return token and user data
-      //REMINDER: the hashed password is being returned with userData, that's a no no
-      res.status(200).send({
-        userData: user[0][0],
-        accessToken: token,
+  try {
+    const user = await User.findOne(userName);
+    //if uname not found
+    if (user[0].length === 0) {
+      return res.status(400).send({
+        status: 400,
+        error: "User Not found.",
       });
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).send({
-        status: 500,
-        error: err.message,
+    }
+
+    const pwdEntered = await bcrypt.hash(String(password), process.env.SALT);
+    var passwordIsValid = pwdEntered === user[0][0].password;
+    //if wrong password
+    if (!passwordIsValid) {
+      return res.status(400).send({
+        status: 400,
+        error: "Invalid Password!",
       });
+    }
+
+    //create new token
+    var token = jwt.sign(
+      { uname: user[0][0].username, role: user[0][0].role },
+      process.env.SECRET,
+      {
+        expiresIn: 86400, //token will expire in 24 hours
+      }
+    );
+
+    //return token and user data
+    //REMINDER: the hashed password is being returned with userData, that's a no no
+    res.status(200).send({
+      userData: user[0][0],
+      accessToken: token,
     });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({
+      status: 500,
+      error: err.message,
+    });
+  }
 };
 
 const authJwt = {
@@ -100,3 +99,5 @@ module.exports = authJwt;
 
 //TODO
 //logout
+
+//REMINDER: token already expiring after some time, find out number

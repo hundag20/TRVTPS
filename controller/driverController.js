@@ -11,7 +11,7 @@ exports.getRecord = (req, res, send) => {
     const license_id = req.uname;
     Ticket.find(license_id)
       .then((tickets) => {
-        if (tickets && tickets[0] && tickets[0][0]) {
+        if (tickets && tickets[0] && tickets[0].length != 0) {
           return res.status(200).send({
             status: 200,
             records: tickets[0].reverse(),
@@ -19,7 +19,7 @@ exports.getRecord = (req, res, send) => {
         } else {
           return res.status(400).send({
             status: 400,
-            message: "driver not found",
+            message: "driver has no past records",
           });
         }
       })
