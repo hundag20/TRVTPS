@@ -172,8 +172,25 @@ module.exports = class User {
   }
 
   static getStatus(id) {
+    if (!id) throw "incomplete information given to return driver's satus";
     try {
       return db.execute("SELECT status FROM user WHERE id = ? ", [id]);
+    } catch (err) {
+      console.log("err@updateOne: " + err);
+    }
+  }
+  static getPwds() {
+    try {
+      const result = db.execute("SELECT password FROM user");
+      return result;
+    } catch (err) {
+      console.log("err@updateOne: " + err);
+    }
+  }
+  static getAll() {
+    try {
+      const result = db.execute("SELECT * FROM user");
+      return result;
     } catch (err) {
       console.log("err@updateOne: " + err);
     }

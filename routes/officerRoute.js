@@ -5,6 +5,7 @@ const express = require("express");
 const officerController = require("../controller/officerController");
 const driverController = require("../controller/driverController");
 const penaltyController = require("../controller/penaltyController");
+const announcementController = require("../controller/announcementController");
 const auth = require("../middleware/auth.js");
 
 const router = express.Router();
@@ -71,6 +72,22 @@ router.get(
     } else next();
   },
   officerController.findDriver
+);
+
+//getAnnouncements
+router.get(
+  "/ts/officer/getNews",
+  auth.verifyToken,
+  //verify role is driver
+  (req, res, next) => {
+    if (req.role != "officer") {
+      res.send({
+        status: 400,
+        error: "you don't have officer authorization",
+      });
+    } else next();
+  },
+  announcementController.getAnnouncements
 );
 
 module.exports = router;

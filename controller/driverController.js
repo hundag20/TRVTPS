@@ -12,10 +12,29 @@ exports.getRecord = (req, res, send) => {
     Ticket.find(license_id)
       .then((tickets) => {
         if (tickets && tickets[0] && tickets[0].length != 0) {
-          return res.status(200).send({
-            status: 200,
-            records: tickets[0].reverse(),
-          });
+          let driverInfo;
+          User.findOne(license_id)
+            .then((driver) => {
+              if (driver[0].length === 0) {
+                return res.status(400).send({
+                  status: 400,
+                  message: "driver not found",
+                });
+              }
+              driverInfo = driver[0][0];
+              return res.status(200).send({
+                status: 200,
+                driverStatus: driverInfo.status,
+                records: tickets[0].reverse(),
+              });
+            })
+            .catch((err) => {
+              console.log(err);
+              return res.status(500).send({
+                message: "error at finding driver",
+                err: err,
+              });
+            });
         } else {
           return res.status(400).send({
             status: 400,

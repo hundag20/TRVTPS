@@ -109,6 +109,7 @@ exports.addNews = async (req, res, next) => {
   }
 };
 
+
 //NOTE: 400: bad request, 500: error at backend
 
 //DONE

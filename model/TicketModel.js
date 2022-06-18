@@ -69,6 +69,15 @@ module.exports = class Ticket {
       throw err;
     }
   }
+  static getAll() {
+    try {
+      const result = db.execute("SELECT * FROM fine");
+      return result;
+    } catch (err) {
+      console.log("err@findOne: " + err);
+      throw err;
+    }
+  }
 };
 
 //TODO verfiy license exists

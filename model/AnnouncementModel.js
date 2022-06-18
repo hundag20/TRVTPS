@@ -26,23 +26,24 @@ module.exports = class Announcement {
       throw err;
     }
   }
-  static find(session_id) {
-    if (!session_id) throw "passing undefined license id";
-    try {
-      const result = db.execute("SELECT * FROM ussd WHERE session_id = ? ", [
-        session_id,
-      ]);
-      return result;
-    } catch (err) {
-      console.log("err@findOne: " + err);
-      throw err;
-    }
-  }
   static getAll() {
     try {
       const result = db.execute("SELECT * FROM announcement");
       return result;
     } catch (err) {
+      console.log("err@getAll: " + err);
+      throw err;
+    }
+  }
+  static getAllFor(roles) {
+    if (!roles) throw "incomplete information given";
+    try {
+      const result = db.execute(
+        "SELECT * FROM announcement WHERE roles = ? OR roles = 'all'",
+        [roles]
+      );
+      return result;
+    } catch (e) {
       console.log("err@getAll: " + err);
       throw err;
     }

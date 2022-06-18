@@ -4,8 +4,8 @@ const pino = require("pino");
 const express = require("express");
 const bodyParser = require("body-parser");
 const fs = require("fs");
+const cors = require("cors");
 const { Console } = require("console");
-
 const myLogger = new Console({
   stdout: fs.createWriteStream("normalStdout.txt"),
 });
@@ -23,8 +23,11 @@ const officerRoutes = require("./routes/officerRoute");
 const adminRoutes = require("./routes/adminRoute");
 const payRoutes = require("./routes/payRoute");
 const ussdRoutes = require("./routes/ussdRoute");
+
+const report = require("./controller/reportController");
 //const adminRoutes = require('./routes/admin');
 
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 // app.use(express.static(path.join(__dirname, 'static')));
@@ -39,8 +42,10 @@ app.use(officerRoutes);
 app.use(payRoutes);
 app.use(adminRoutes);
 app.use(ussdRoutes);
+
+report.scheduledReports();
 //app.use(express.static(__dirname));
-http.createServer(app).listen();
+http.createServer(app).listen(3002);
 
 //------todos------
 //DONE: disable double ticketing

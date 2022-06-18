@@ -274,11 +274,12 @@ module.exports = {
 // DONE: calcAmount and return*
 // DONE: suspend on ticketing*
 
-// 3. update driver, ticket, and payment info on payment success* //test with localhost..for console.logging
+// DONE: update driver, ticket, and payment info on payment success* //test with localhost..for console.logging
+
 // 5. redirect to real page on payment success*
+// 4. return appropriate message on ussd make payment
 
 // 7. Admin UI*
 
-// 4. return appropriate message on ussd make payment
 // 6. logout
 // 8. Admin backend
