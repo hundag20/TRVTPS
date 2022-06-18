@@ -45,7 +45,7 @@ app.use(ussdRoutes);
 
 report.scheduledReports();
 //app.use(express.static(__dirname));
-http.createServer(app).listen(3002);
+http.createServer(app).listen();
 
 //------todos------
 //DONE: disable double ticketing
