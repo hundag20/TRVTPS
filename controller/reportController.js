@@ -2,6 +2,7 @@ const cron = require("node-cron");
 const mailer = require("nodemailer");
 const User = require("../model/UserModel.js");
 const Ticket = require("../model/TicketModel.js");
+const dateParser = require("date-and-time");
 
 let transporter;
 try {
@@ -63,44 +64,22 @@ try {
         fri: 0,
         sat: 0,
         sun: 0,
+        tot: 0,
       },
-      currentMonth: {
-        mon: 0,
-        tue: 0,
-        wed: 0,
-        thu: 0,
-        fri: 0,
-        sat: 0,
-        sun: 0,
-      },
-      pastYear: {
-        jan: 0,
-        feb: 0,
-        mar: 0,
-        apr: 0,
-        may: 0,
-        jun: 0,
-        jul: 0,
-        aug: 0,
-        sep: 0,
-        oct: 0,
-        nov: 0,
-        dec: 0,
-      },
+      pastMonth: [
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+      ],
     };
-    //NOTE: monthly now means 7(instead of 4) monthly stats[eg. all mondays in the past month] (daily(yesterday's) report exists for subs but not for visual)
+    //NOTE: monthly means past 31 day (first index is yesterday)
 
     const allFines = await Ticket.getAll();
     if (allFines && allFines[0] && allFines[0].length > 0) {
       allFines[0].forEach((ticket) => {
         const ticketDate = String(ticket.date);
         if (ticketDate && ticketDate != "Invalid Date") {
-          const date = {};
-          date.full = ticketDate;
-          date.year = ticketDate.split(" ")[3];
-          date.month = ticketDate.split(" ")[1];
-          date.day_of_the_week = ticketDate.split(" ")[0];
-          date.day_of_the_month = ticketDate.split(" ")[2];
+          const date = new Date(ticketDate);
+          const today = new Date();
 
           const week = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
           const year = [
@@ -117,34 +96,89 @@ try {
             "nov",
             "dec",
           ];
-          const today = {};
-          today.full = new Date();
-          today.day_of_the_week = week[new Date().getDay()];
-          today.day_of_the_month = new Date().getDate();
-          today.month = year[new Date().getMonth()];
-          today.year = new Date().getFullYear();
-          if (date.year == today.year) {
-            if (date.month == today.month) {
-              //yesterday //NOTE: (except month change days)
-              if (date.day_of_the_month == today.day_of_the_month - 1) {
-                fines.pastDay++;
+
+          if (date.getFullYear() == today.getFullYear()) {
+            //handle yesterday's fines
+            const yest = dateParser.addDays(today, -1);
+            if (date.getDate() === yest.getDate()) fines.pastDay++;
+
+            //handle past month (past 31 days)
+            for (let i = 1; i <= 31; i++) {
+              const x = dateParser.addDays(today, -i);
+              if (date.getDate() == x.getDate()) {
+                fines.pastMonth[i - 1]++;
+                fines.pastMonth[31]++;
               }
-              //past month's stats grouped into 7
-              if (date.day_of_the_week == "mon") fines.currentMonth.mon++;
-              if (date.day_of_the_week == "tue") fines.currentMonth.tue++;
-              if (date.day_of_the_week == "wed") fines.currentMonth.wed++;
-              if (date.day_of_the_week == "thu") fines.currentMonth.thu++;
-              if (date.day_of_the_week == "fri") fines.currentMonth.fri++;
-              if (date.day_of_the_week == "sat") fines.currentMonth.sat++;
-              if (date.day_of_the_week == "sun") fines.currentMonth.sun++;
             }
-            //handle month change dates
-            //handle past week here
+
+            //handle past full week here (last saturday and 6 days b4 that until sunday)
+            let y, last_sat_date;
+            let i = 1;
+            while (true) {
+              y = dateParser.addDays(today, -i);
+              if (y.getDay() === 6) {
+                last_sat_date = y.getDate();
+                break;
+              }
+              i++;
+            }
+
+            if (date.getDate() == last_sat_date) {
+              fines.pastWeek.sat++;
+              fines.pastWeek.tot++;
+            }
+            if (date.getDate() == dateParser.addDays(y, -1).getDate()) {
+              fines.pastWeek.fri++;
+              fines.pastWeek.tot++;
+            }
+            if (date.getDate() == dateParser.addDays(y, -2).getDate()) {
+              fines.pastWeek.tot++;
+              fines.pastWeek.thu++;
+            }
+            if (date.getDate() == dateParser.addDays(y, -3).getDate()) {
+              fines.pastWeek.tot++;
+              fines.pastWeek.wed++;
+            }
+            if (date.getDate() == dateParser.addDays(y, -4).getDate()) {
+              fines.pastWeek.tot++;
+              fines.pastWeek.tue++;
+            }
+            if (date.getDate() == dateParser.addDays(y, -5).getDate()) {
+              fines.pastWeek.tot++;
+              fines.pastWeek.mon++;
+            }
+            if (date.getDate() == dateParser.addDays(y, -6).getDate()) {
+              fines.pastWeek.tot++;
+              fines.pastWeek.sun++;
+            }
           }
           //handle annual here
         }
       });
     }
+    return fines;
+  };
+
+  const r_dognutStats = async (schedule) => {
+    let levels = [0, 0, 0, 0, 0, 0, 0];
+
+    const allTickets = await Ticket.getAll();
+    if (allTickets && allTickets[0] && allTickets[0].length > 0) {
+      allTickets[0].forEach((el) => {
+        if (el.offence_level === 1) levels[0]++;
+        if (el.offence_level === 2) levels[1]++;
+        if (el.offence_level === 3) levels[2]++;
+        if (el.offence_level === 4) levels[3]++;
+        if (el.offence_level === 5) levels[4]++;
+        if (el.offence_level === 6) levels[5]++;
+        if (el.offence_level === 7) levels[6]++;
+      });
+    }
+
+    const results = {
+      levels: levels,
+    };
+    return results;
   };
 
   const getReport = async (schedule) => {
@@ -152,12 +186,13 @@ try {
     //return total number of activated and unactivaeted accounts as input for piechart
     report.activesPercentage = await r_active();
 
-    //return num of fines issued(in the last day, last week, last month, last year)
+    //return num of fines issued(in the last day, last week, last month)
     report.barStats = await r_barStats();
 
     //return num of fines issued in each violation level (1, 2, 3, 4, 5, 6, 7)
-    // report.dognutStats = await r_dognutStats();
+    report.dognutStats = await r_dognutStats();
 
+    console.log(report);
     return report;
   };
   const sendEmail = async (message, email, subject, from, too) => {
