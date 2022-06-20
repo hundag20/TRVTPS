@@ -130,7 +130,7 @@ exports.resetPwd = (req, res, send) => {
             message: "admin not found",
           });
         }
-        const URL = "http://localhost:3002/ts/admin";
+        const URL = "https://etmilestone.com/ts/admin";
         const tokenObject = {
           email: email,
         };

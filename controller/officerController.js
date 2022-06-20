@@ -58,7 +58,7 @@ exports.resetPwd = (req, res, send) => {
           });
         }
         const officerInfo = officer[0][0];
-        const URL = "http://localhost:3002/ts/officer";
+        const URL = "https://etmilestone.com/ts/officer";
         const tokenObject = {
           uname: uname,
         };
