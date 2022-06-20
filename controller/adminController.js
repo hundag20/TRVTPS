@@ -2,6 +2,9 @@ const fs = require("fs");
 const path = require("path");
 const csv = require("csv-parser");
 const User = require("../model/UserModel.js");
+const Admin = require("../model/AdminModel.js");
+const { genToken } = require("../middleware/auth.js");
+const { sendEmail } = require("./reportController.js");
 const Announcement = require("../model/AnnouncementModel.js");
 
 exports.addMultiUsers = async (req, res, next) => {
@@ -109,6 +112,63 @@ exports.addNews = async (req, res, next) => {
   }
 };
 
+exports.resetPwd = (req, res, send) => {
+  try {
+    const email = req.query.email;
+    if (!email) {
+      return res.status(400).send({
+        status: 400,
+        message: "username not provided",
+      });
+    }
+
+    Admin.findOne(email)
+      .then(async (admin) => {
+        if (!admin || admin[0].length === 0) {
+          return res.status(400).send({
+            status: 400,
+            message: "admin not found",
+          });
+        }
+        const URL = "http://localhost:3002/ts/admin";
+        const tokenObject = {
+          email: email,
+        };
+        const resetToken = await genToken(tokenObject);
+
+        const link = `${URL}/passwordReset?token=${resetToken}&email=${email}`;
+        const emailData = {
+          email: email,
+          message: `Hello, follow the following link to reset your password
+          link: ${link}`,
+          subject: "Admin Reset Password",
+          from: "'Rest Admin password' <trtvps@etmilestone.com>",
+          too: "Registered Admin",
+        };
+        await sendEmail(
+          emailData.message,
+          emailData.email,
+          emailData.subject,
+          emailData.from,
+          emailData.too
+        );
+        return res.render("adminresetlinksent");
+      })
+      .catch((err) => {
+        console.log("@2", err);
+        return res.status(500).send({
+          status: 500,
+          message: "something went wrong",
+        });
+      });
+  } catch (e) {
+    console.log("@1", e);
+    return res.status(500).send({
+      status: 500,
+      message: "something went wrong",
+    });
+  }
+};
 
 //NOTE: 400: bad request, 500: error at backend
 

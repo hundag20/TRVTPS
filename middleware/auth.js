@@ -1,9 +1,18 @@
+const path = require("path");
 const jwt = require("jsonwebtoken");
 let User = require("../model/UserModel.js");
+let Admin = require("../model/AdminModel.js");
 const bcrypt = require("bcrypt");
 const dotenv = require("dotenv");
 
 dotenv.config();
+
+const genToken = async (tokenObject) => {
+  // create a unique token
+  var secret = process.env.SECRET;
+  const token = jwt.sign(tokenObject, secret);
+  return token;
+};
 
 //authenticate
 const verifyToken = (req, res, next) => {
@@ -84,12 +93,111 @@ const login = async (req, res, next) => {
   }
 };
 
+const resetPage = async (req, res, next) => {
+  const token = req.query.token;
+  const uname = req.query.uname;
+
+  if (token && uname) {
+    res.render("resetpage", {
+      token: token,
+      uname: uname,
+    });
+  } else {
+    res.send("<html><body>404</body</html>");
+  }
+};
+
+const resetPwd = async (req, res, next) => {
+  try {
+    const token = req.body.token;
+    const uname = req.body.uname;
+    const newPassword = req.body.newPassword;
+
+    jwt.verify(token, process.env.SECRET, (err, decoded) => {
+      if (err || decoded.uname != uname) {
+        return res.status(401).send({
+          message: "invalid token!",
+        });
+      }
+
+      //update user pwd here
+      User.updateOne(uname, "password", newPassword)
+        .then(() => {
+          res.render("resetSuccess");
+        })
+        .catch((e) => {
+          console.log(e);
+          return res.status(500).send({
+            message: "something went wrong",
+          });
+        });
+    });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).send({
+      message: "something went wrong",
+    });
+  }
+};
+
+const resetPage2 = async (req, res, next) => {
+  const token = req.query.token;
+  const email = req.query.email;
+
+  if (token && email) {
+    res.render("resetpage2", {
+      token: token,
+      email: email,
+    });
+  } else {
+    res.send("<html><body>404</body</html>");
+  }
+};
+
+const resetPwd2 = async (req, res, next) => {
+  try {
+    const token = req.body.token;
+    const email = req.body.email;
+    const newPassword = req.body.newPassword;
+    jwt.verify(token, process.env.SECRET, (err, decoded) => {
+      if (err || decoded.email != email) {
+        return res.status(401).send({
+          message: "invalid token!",
+        });
+      }
+
+      //update user pwd here
+      Admin.updateOne(email, "password", newPassword)
+        .then(() => {
+          res.render("resetSuccess");
+        })
+        .catch((e) => {
+          console.log(e);
+          return res.status(500).send({
+            message: "something went wrong",
+          });
+        });
+    });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).send({
+      message: "something went wrong",
+    });
+  }
+};
+
 const authJwt = {
   verifyToken: verifyToken,
   login: login,
+  resetPwd: resetPwd,
+  resetPwd2: resetPwd2,
+  resetPage: resetPage,
+  resetPage2: resetPage2,
+  genToken: genToken,
   // isModerator: isModerator,
   // isModeratorOrAdmin: isModeratorOrAdmin,
 };
+
 module.exports = authJwt;
 
 //----notes----

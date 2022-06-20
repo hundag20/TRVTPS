@@ -16,6 +16,11 @@ const router = express.Router();
 router.get("/ts/officer/login", auth.login);
 //REMINDER: post changed to get for testing but bad practice
 
+//resetPwd
+router.get("/ts/officer/resetPwd", officerController.resetPwd);
+router.get("/ts/officer/passwordReset", auth.resetPage);
+router.post("/ts/officer/passwordReset", auth.resetPwd);
+
 //issue ticket endpoint
 router.get(
   "/ts/officer/issueTicket",

@@ -11,7 +11,7 @@ try {
     host: "mail.etmilestone.com",
     port: 465,
     auth: {
-      user: "traffic.report@etmilestone.com",
+      user: "trtvps@etmilestone.com",
       pass: "passwordpasswordpassword",
     },
   });
@@ -192,32 +192,31 @@ try {
     //return num of fines issued in each violation level (1, 2, 3, 4, 5, 6, 7)
     report.dognutStats = await r_dognutStats();
 
-    console.log(report);
+    // console.log(report);
     return report;
   };
   const sendEmail = async (message, email, subject, from, too) => {
-    //sending the email
-    const to = `"${too}" <${email}>`;
-    transporter
-      .sendMail({
+    try {
+      //sending the email
+      const to = `"${too}" <${email}>`;
+      const emailsent = await transporter.sendMail({
         from: from,
         to: to,
         subject: subject,
         text: message,
-      })
-      .then((_) => {
-        console.log("Email sent on " + new Date());
-      })
-      .catch((error) => {
-        console.log(error);
       });
+      console.log(emailsent);
+      console.log("Email sent on " + new Date());
+      return;
+    } catch (e) {
+      throw e;
+    }
   };
 
   const scheduledReports = async () => {
     try {
       //setting up email messages
-      const from =
-        "'Automatic Traffic Reports' <traffic.report@etmilestone.com>";
+      const from = "'Automatic Traffic Reports' <trtvps@etmilestone.com>";
       const to = "Traffic Report Subscriber";
 
       const init = async (schedule) => {

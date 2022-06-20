@@ -37,6 +37,7 @@ app.get("/ts", (req, res) => {
   myLogger.log("/ get received");
   res.send("<html>/ts page served</html>");
 });
+
 app.use(driverRoutes);
 app.use(officerRoutes);
 app.use(payRoutes);
@@ -45,7 +46,7 @@ app.use(ussdRoutes);
 
 report.scheduledReports();
 //app.use(express.static(__dirname));
-http.createServer(app).listen();
+http.createServer(app).listen(3002);
 
 //------todos------
 //DONE: disable double ticketing

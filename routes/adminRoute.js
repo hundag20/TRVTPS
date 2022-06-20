@@ -22,7 +22,14 @@ router.get(
   upload.single("file"),
   adminController.addMultiUsers
 );
+
 router.get("/ts/admin/login", auth.login);
+
+//admin forgot pwd endpoint
+router.get("/ts/admin/resetPwd", adminController.resetPwd);
+router.get("/ts/admin/passwordReset", auth.resetPage2);
+router.post("/ts/admin/passwordReset", auth.resetPwd2);
+
 router.get(
   "/ts/admin/addUser",
   auth.verifyToken,
