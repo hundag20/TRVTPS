@@ -125,10 +125,7 @@ exports.resetPwd = (req, res, send) => {
     Admin.findOne(email)
       .then(async (admin) => {
         if (!admin || admin[0].length === 0) {
-          return res.status(400).send({
-            status: 400,
-            message: "admin not found",
-          });
+          return res.render("notfound");
         }
         const URL = "https://etmilestone.com/ts/admin";
         const tokenObject = {
@@ -156,17 +153,11 @@ exports.resetPwd = (req, res, send) => {
       })
       .catch((err) => {
         console.log("@2", err);
-        return res.status(500).send({
-          status: 500,
-          message: "something went wrong",
-        });
+        return res.render("tryagain");
       });
   } catch (e) {
     console.log("@1", e);
-    return res.status(500).send({
-      status: 500,
-      message: "something went wrong",
-    });
+    return res.render("tryagain");
   }
 };
 

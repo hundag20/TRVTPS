@@ -2,7 +2,7 @@ const path = require("path");
 const jwt = require("jsonwebtoken");
 let User = require("../model/UserModel.js");
 let Admin = require("../model/AdminModel.js");
-const bcrypt = require("bcrypt");
+const md5 = require("md5");
 const dotenv = require("dotenv");
 
 dotenv.config();
@@ -59,10 +59,10 @@ const login = async (req, res, next) => {
       });
     }
 
-    const pwdEntered = await bcrypt.hash(String(password), process.env.SALT);
+    const pwdEntered = await await md5(String(password));
     var passwordIsValid = pwdEntered === user[0][0].password;
     //if wrong password
-    if (!passwordIsValid) {
+    if (!passwordIsValid || user[0][0].password === "inactive") {
       return res.status(400).send({
         status: 400,
         error: "Invalid Password!",

@@ -1,11 +1,11 @@
 const db = require("../utils/database");
 
 module.exports = class ReportSubs {
-  static findByEmail(email) {
-    if (!email) throw "passing undefined value for searching subscribers";
+  static async findByEmail(email) {
+    if (!email) throw "passing undefined value for searching subscriber";
     try {
-      const result = db.execute(
-        "SELECT * FROM report_subscribers WHERE email = ? ",
+      const result = await db.execute(
+        "SELECT * FROM report_subscriber WHERE email = ? ",
         [email]
       );
       return result;
@@ -14,9 +14,10 @@ module.exports = class ReportSubs {
       throw err;
     }
   }
-  static findBySchedule(schedule) {
-    if (!schedule)
-      throw "passing undefined value for filtering subscribers by schedule";
+  static async findBySchedule(schedule) {
+    if (!schedule) {
+      throw "passing undefined value for filtering subscriber by schedule";
+    }
     if (
       schedule != "daily" &&
       schedule != "weekly" &&
@@ -26,9 +27,11 @@ module.exports = class ReportSubs {
       throw "schedule value is invalid";
 
     try {
-      return db.execute("SELECT * FROM report_subscribers WHERE schedule = ?", [
-        schedule,
-      ]);
+      const report = await db.execute(
+        "SELECT * FROM report_subscriber WHERE schedule = ?",
+        [schedule]
+      );
+      return report;
     } catch (err) {
       console.log("err@findByEmail: " + err);
       throw err;

@@ -1,10 +1,17 @@
 const cron = require("node-cron");
+const { jsPDF } = require("jspdf");
+require("jspdf-autotable");
+const { cell } = require("jspdf");
 const mailer = require("nodemailer");
 const User = require("../model/UserModel.js");
 const Ticket = require("../model/TicketModel.js");
+const ReportSubs = require("../model/ReportSubsModel.js");
 const dateParser = require("date-and-time");
 
 let transporter;
+// Default export is a4 paper, portrait, using millimeters for units
+let doc = new jsPDF();
+
 try {
   // Creating a transporter
   transporter = mailer.createTransport({
@@ -28,13 +35,15 @@ try {
     const allUsers = await User.getAll();
     if (allUsers && allUsers[0] && allUsers[0].length > 0) {
       allUsers[0].forEach((el) => {
-        if (el.status === "suspended") suspendeds = suspendeds + 1;
-        if (el.status != "suspended" && el.status != "active")
+        if (el.status === "suspended") {
+          suspendeds = suspendeds + 1;
+        } else if (el.status != "suspended" && el.status != "active") {
           fineds = fineds + 1;
-        if (el.password === "inactive") {
-          inactives = inactives + 1;
         } else {
           actives = actives + 1;
+        }
+        if (el.password === "inactive") {
+          inactives = inactives + 1;
         }
       });
       actives = percentage(actives, allUsers[0].length);
@@ -230,27 +239,107 @@ try {
           throw "using invalid schedule for filtering subscribers by schedule";
         const subject = `Scheduled ${schedule} report`;
         const message = await getReport(schedule);
+        const txt = JSON.stringify(message);
 
-        const subs = await RebortSubs.findBySchedule(schedule);
+        //status percentages
+        doc.autoTable({
+          head: [["Drvier staus", "Percentage"]],
+          body: [
+            [
+              "Inactivated",
+              `${parseFloat(message.activesPercentage.inactives).toFixed(2)} %`,
+            ],
+            [
+              "Activate",
+              `${parseFloat(message.activesPercentage.actives).toFixed(2)} %`,
+            ],
+            [
+              "Suspended",
+              `${parseFloat(message.activesPercentage.suspendeds).toFixed(
+                2
+              )} %`,
+            ],
+            [
+              "Fined",
+              `${parseFloat(message.activesPercentage.fineds).toFixed(2)} %`,
+            ],
+            // ...
+          ],
+        });
+
+        //yesterdays tickets
+        doc.autoTable({
+          head: [["Schedule", "total tickets issued"]],
+          body: [
+            ["Yesterday", `${message.barStats.pastDay}`],
+            // ...
+          ],
+        });
+
+        //last weeks tickets
+        doc.autoTable({
+          head: [["Days in the past Week", "total tickets issued"]],
+          body: [
+            ["moday", `${message.barStats.pastWeek.mon}`],
+            ["moday", `${message.barStats.pastWeek.mon}`],
+            ["Moday", `${message.barStats.pastWeek.mon}`],
+            ["Tuesday", `${message.barStats.pastWeek.tue}`],
+            ["Wednesday", `${message.barStats.pastWeek.wed}`],
+            ["Saturday", `${message.barStats.pastWeek.sat}`],
+            ["Sunday", `${message.barStats.pastWeek.sun}`],
+            // ...
+          ],
+        });
+
+        const monthArray = [];
+        message.barStats.pastMonth.forEach((el, i) => {
+          monthArray[i] = [`${i + 1}`, el];
+        });
+
+        //last 31 day tickets
+        doc.autoTable({
+          head: [
+            ["Days in the past Month (last 31 days)", "total tickets issued"],
+          ],
+          body: monthArray,
+        });
+
+        const randoName = String(Math.random());
+        doc.save(`${randoName}.pdf`);
+
+        const attachment = [
+          {
+            // file on disk as an attachment
+            filename: `${randoName}.pdf`,
+            path: `/${randoName}.pdf`, // stream this file
+          },
+        ];
+
+        console.log("subs1");
+        const subs = await ReportSubs.findBySchedule(schedule);
+
         if (subs && subs[0] && subs[0].length > 0) {
-          subs[0].forEach((el) => {
-            sendEmail(message, el.email, subject, from, to);
+          subs[0].forEach(async (el) => {
+            console.log("user found", el.email);
+            sendEmail("message", String(el.email), subject, from, to).catch(
+              (e) => console.log(e)
+            );
           });
         }
       };
 
-      await getReport();
       const initDaily = () => init("daily");
       const initWeekly = () => init("weekly");
       const initMonthly = () => init("monthly");
       const initAnnual = () => init("anuual");
 
-      cron.schedule("* * * * *", initDaily);
+      //cron.schedule("* * * * *", initDaily);
     } catch (e) {
       console.log(e);
     }
   };
 
+  //server admin panel
   const getReports = async (req, res, next) => {
     try {
       const report = await getReport();

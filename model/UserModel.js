@@ -1,5 +1,5 @@
 const db = require("../utils/database");
-const bcrypt = require("bcrypt");
+const md5 = require("md5");
 const dotenv = require("dotenv");
 const res = require("express/lib/response");
 
@@ -53,7 +53,7 @@ module.exports = class User {
     }
     //becrypt enc password before inserting into db, but need to decrypt cuz req holds encrypted pwd.
     // now we set user password to hashed password
-    const newPwd = await bcrypt.hash(String(this.password), process.env.SALT);
+    const newPwd = await await md5(this.password);
     // console.log('entered pwd: ', String(this.password))
     // console.log('SALT: ', process.env.SALT)
     try {
@@ -158,7 +158,7 @@ module.exports = class User {
           throw "invalid password";
         }
         //hash and salt
-        const newPwd = await bcrypt.hash(String(fieldValue), process.env.SALT);
+        const newPwd = await await md5(String(fieldValue));
         const result = db.execute(
           "UPDATE user SET password = ? WHERE username = ? ",
           [newPwd, uname]
