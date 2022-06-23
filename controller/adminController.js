@@ -116,10 +116,7 @@ exports.resetPwd = (req, res, send) => {
   try {
     const email = req.query.email;
     if (!email) {
-      return res.status(400).send({
-        status: 400,
-        message: "username not provided",
-      });
+      return res.render("usernamemissing");
     }
 
     Admin.findOne(email)
